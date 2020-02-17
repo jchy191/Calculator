@@ -23,7 +23,6 @@ let temporaryAnswer = "";
 let operator = "";
 let lastButtonPressedWasEquals = 0;
 let display = document.querySelector('#display');
-let firstOperationChecker = 1;
 
 /*Functions*/
 
@@ -91,9 +90,30 @@ operatorButton.forEach((button) => {
     });
 });
 
+const sqrtButton = document.querySelector('#sqrt');
+sqrtButton.addEventListener('click', (e) => {
+    if (secondNumber!= ""){
+        firstNumber = "";
+        operator = "";
+        temporaryAnswer = Math.sqrt(secondNumber);
+        display.innerHTML = `${temporaryAnswer}`;
+        lastButtonPressedWasEquals = 1;
+    }
+});
+
+const percentageButton = document.querySelector('#percentage');
+percentageButton.addEventListener('click', (e) => {
+    temporaryAnswer = operate("÷", temporaryAnswer, 100);
+    display.innerHTML = `${temporaryAnswer}`;
+    lastButtonPressedWasEquals = 1;
+})
+
 const equalsButton = document.querySelector('#equals');
 equalsButton.addEventListener('click', (e) => {
     display.innerHTML = `${temporaryAnswer}`;
+    if (firstNumber == ""){
+        display.innerHTML = `${secondNumber}`;
+    }
     lastButtonPressedWasEquals = 1;
 });
 
@@ -101,12 +121,18 @@ const clearButton = document.querySelector('#clear');
 clearButton.addEventListener('click', (e) => {
     reset();
     lastButtonPressedWasEquals = 0;
-})
+});
+
+const clearEntry = document.querySelector('#clearentry');
+clearEntry.addEventListener('click', (e) => {
+    secondNumber = "";
+    display.innerHTML = `${secondNumber}`;
+});
 
 const debug = document.querySelectorAll('.button');
 debug.forEach((button) => {
     button.addEventListener('click', (e) => console.log({firstNumber, secondNumber, operator, temporaryAnswer}))
-})
+});
 
 
 //to do: add decimal point, add backspace, add pressing animatino
