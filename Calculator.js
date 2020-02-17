@@ -19,8 +19,9 @@ function operate(sign, a, b) {
 
 let firstNumber = ""; 
 let secondNumber = "";
+let temporaryAnswer = "";
 let operator = "";
-let lastButtonPressed = 'number';
+let lastButtonPressedWasEquals = 0;
 let display = document.querySelector('#display');
 let firstOperationChecker = 1;
 
@@ -42,64 +43,70 @@ function reset(){
     secondNumber = "";
     operator = "";
     display.innerHTML = "";
-  //  firstOperationChecker = 1;
-    lastButtonPressed = "number";
+    temporaryAnswer = "";
 }
 
 function executeCalculation(){
-    if (firstNumber == ""){
-        firstNumber = secondNumber;
-    } else {
-        firstNumber = operate(operator, firstNumber, secondNumber);
-        firstOperationChecker = 0;
-   };
-   console.log(firstNumber);
+    if (firstNumber != "") temporaryAnswer = operate(operator, firstNumber, secondNumber);
 };
+   
 
 /*Calculator Buttons*/
+
+
 
 const numberButton = document.querySelectorAll('.number');
 numberButton.forEach((button) => {
     button.addEventListener('click', (e) => {
-        if (lastButtonPressed == 'operator'){
-            executeCalculation();
-            secondNumber = "";
-            secondNumber += button.id;
-            display.innerHTML = `${secondNumber}`;
-        } else if (lastButtonPressed == 'equals'){
+        if (lastButtonPressedWasEquals == 1){
             reset();
             secondNumber += button.id;
             display.innerHTML = `${secondNumber}`;
         } else {
             secondNumber += button.id;
             display.innerHTML = `${secondNumber}`;
+            executeCalculation();
         }
-        lastButtonPressed = "number";
+        lastButtonPressedWasEquals = 0;
     });
 });
 
 const operatorButton = document.querySelectorAll('.operation');
 operatorButton.forEach((button) => {
     button.addEventListener('click', (e) => {
-        if (secondNumber != ""){
-            lastButtonPressed = 'operator';
+        if (display.innerHTML != ""){
             operator = button.id;
             showOperatorOnDisplay();
+            if (firstNumber == "") {
+                firstNumber = secondNumber;
+                secondNumber = "";
+            }
+            if (temporaryAnswer != "") {
+                firstNumber = temporaryAnswer;
+                display.innerHTML = `${temporaryAnswer}`;
+                secondNumber = "";
+            }
+            lastButtonPressedWasEquals = 0;
         }
     });
 });
 
 const equalsButton = document.querySelector('#equals');
 equalsButton.addEventListener('click', (e) => {
-    executeCalculation();
-    display.innerHTML = `${firstNumber}`;
-    lastButtonPressed = "equals";
+    display.innerHTML = `${temporaryAnswer}`;
+    lastButtonPressedWasEquals = 1;
 });
 
 const clearButton = document.querySelector('#clear');
 clearButton.addEventListener('click', (e) => {
     reset();
+    lastButtonPressedWasEquals = 0;
+})
+
+const debug = document.querySelectorAll('.button');
+debug.forEach((button) => {
+    button.addEventListener('click', (e) => console.log({firstNumber, secondNumber, operator, temporaryAnswer}))
 })
 
 
-//to do: add decimal point
+//to do: add decimal point, add backspace, add pressing animatino
