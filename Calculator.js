@@ -51,7 +51,7 @@ function executeCalculation(){
 
 function rounder(){
     let lastDigit;
-    if (temporaryAnswer.length > 15){
+    if (temporaryAnswer.toString().length > 15){
         (temporaryAnswer[16] >= 5) ? lastDigit = temporaryAnswer[15] + 1 : lastDigit = temporaryAnswer[15];
     }
 }
@@ -95,6 +95,19 @@ operatorButton.forEach((button) => {
             lastButtonPressedWasEquals = 0;
         }
     });
+});
+
+const decimalButton = document.querySelector('#decimal');
+decimalButton.addEventListener('click', (e) => {
+    if (secondNumber.indexOf(".") == -1) {
+        if (secondNumber == "") {
+            secondNumber += "0";
+        }
+        secondNumber += ".";
+        display.innerHTML = `${secondNumber}`;
+        
+    }
+    console.log("hi");
 });
 
 const equalsButton = document.querySelector('#equals');
