@@ -48,6 +48,13 @@ function reset(){
 function executeCalculation(){
     if (firstNumber != "") temporaryAnswer = operate(operator, firstNumber, secondNumber);
 };
+
+function rounder(){
+    let lastDigit;
+    if (temporaryAnswer.length > 15){
+        (temporaryAnswer[16] >= 5) ? lastDigit = temporaryAnswer[15] + 1 : lastDigit = temporaryAnswer[15];
+    }
+}
    
 
 /*Calculator Buttons*/
@@ -90,11 +97,23 @@ operatorButton.forEach((button) => {
     });
 });
 
+const equalsButton = document.querySelector('#equals');
+equalsButton.addEventListener('click', (e) => {
+    display.innerHTML = `${temporaryAnswer}`;
+    if (firstNumber == ""){
+        display.innerHTML = `${secondNumber}`;
+    }
+    lastButtonPressedWasEquals = 1;
+});
+
 const sqrtButton = document.querySelector('#sqrt');
 sqrtButton.addEventListener('click', (e) => {
     if (secondNumber!= ""){
         firstNumber = "";
         operator = "";
+        if (lastButtonPressedWasEquals == 1) {
+            secondNumber = temporaryAnswer;
+        }
         temporaryAnswer = Math.sqrt(secondNumber);
         display.innerHTML = `${temporaryAnswer}`;
         lastButtonPressedWasEquals = 1;
@@ -106,15 +125,6 @@ percentageButton.addEventListener('click', (e) => {
     temporaryAnswer = operate("÷", temporaryAnswer, 100);
     display.innerHTML = `${temporaryAnswer}`;
     lastButtonPressedWasEquals = 1;
-})
-
-const equalsButton = document.querySelector('#equals');
-equalsButton.addEventListener('click', (e) => {
-    display.innerHTML = `${temporaryAnswer}`;
-    if (firstNumber == ""){
-        display.innerHTML = `${secondNumber}`;
-    }
-    lastButtonPressedWasEquals = 1;
 });
 
 const clearButton = document.querySelector('#clear');
@@ -123,10 +133,15 @@ clearButton.addEventListener('click', (e) => {
     lastButtonPressedWasEquals = 0;
 });
 
-const clearEntry = document.querySelector('#clearentry');
-clearEntry.addEventListener('click', (e) => {
-    secondNumber = "";
+const backspace = document.querySelector('#backspace');
+backspace.addEventListener('click', (e) => {
+    if (lastButtonPressedWasEquals == 1) {
+        secondNumber = temporaryAnswer.toString();
+    };
+    secondNumber = secondNumber.slice(0, -1);
+    temporaryAnswer = secondNumber;
     display.innerHTML = `${secondNumber}`;
+    lastButtonPressedWasEquals = 0;
 });
 
 const debug = document.querySelectorAll('.button');
