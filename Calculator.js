@@ -47,13 +47,18 @@ function reset(){
 
 function executeCalculation(){
     if (firstNumber != "") temporaryAnswer = operate(operator, firstNumber, secondNumber);
+    temporaryAnswer = rounder(temporaryAnswer);
 };
 
-function rounder(){
+function rounder(number){
     let lastDigit;
-    if (temporaryAnswer.toString().length > 15){
-        (temporaryAnswer[16] >= 5) ? lastDigit = temporaryAnswer[15] + 1 : lastDigit = temporaryAnswer[15];
+    let displayedNumber = number.toString();
+    if (displayedNumber.length > 15){
+        (displayedNumber[15] >= 5) ? lastDigit = displayedNumber[14] + 1 : lastDigit = displayedNumber[14];
+        console.log(displayedNumber.slice(0,14));
+        displayedNumber = displayedNumber.slice(0, 14) + lastDigit;
     }
+    return displayedNumber;
 }
    
 
@@ -64,6 +69,9 @@ function rounder(){
 const numberButton = document.querySelectorAll('.number');
 numberButton.forEach((button) => {
     button.addEventListener('click', (e) => {
+        if (secondNumber.length == 15){
+            return;
+        }
         if (lastButtonPressedWasEquals == 1){
             reset();
             secondNumber += button.id;
