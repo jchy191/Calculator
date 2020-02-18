@@ -54,7 +54,7 @@ function rounder(number){
     let lastDigit;
     let displayedNumber = number.toString();
     if (displayedNumber.length > 15){
-        (displayedNumber[15] >= 5) ? lastDigit = displayedNumber[14] + 1 : lastDigit = displayedNumber[14];
+        (displayedNumber[15] >= 5) ? lastDigit = parseFloat(displayedNumber[14]) + 1 : lastDigit = displayedNumber[14];
         console.log(displayedNumber.slice(0,14));
         displayedNumber = displayedNumber.slice(0, 14) + lastDigit;
     }
@@ -136,6 +136,7 @@ sqrtButton.addEventListener('click', (e) => {
             secondNumber = temporaryAnswer;
         }
         temporaryAnswer = Math.sqrt(secondNumber);
+        temporaryAnswer = rounder(temporaryAnswer);
         display.innerHTML = `${temporaryAnswer}`;
         lastButtonPressedWasEquals = 1;
     }
