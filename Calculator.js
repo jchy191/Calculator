@@ -55,7 +55,6 @@ function rounder(number){
     let displayedNumber = number.toString();
     if (displayedNumber.length > 15){
         (displayedNumber[15] >= 5) ? lastDigit = parseFloat(displayedNumber[14]) + 1 : lastDigit = displayedNumber[14];
-        console.log(displayedNumber.slice(0,14));
         displayedNumber = displayedNumber.slice(0, 14) + lastDigit;
     }
     return displayedNumber;
@@ -144,7 +143,12 @@ sqrtButton.addEventListener('click', (e) => {
 
 const percentageButton = document.querySelector('#percentage');
 percentageButton.addEventListener('click', (e) => {
+    if (!temporaryAnswer) {
+        if (!secondNumber) return;
+        temporaryAnswer = secondNumber;
+    }
     temporaryAnswer = operate("÷", temporaryAnswer, 100);
+    temporaryAnswer = rounder(temporaryAnswer);
     display.innerHTML = `${temporaryAnswer}`;
     lastButtonPressedWasEquals = 1;
 });
